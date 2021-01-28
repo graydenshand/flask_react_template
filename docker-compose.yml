@@ -1,0 +1,27 @@
+version: "3.8"
+services:
+  app:
+    image: rental_hub:development
+    build: ./
+    volumes:
+      - "./:/home/app"
+    ports:
+      - 5000:5000
+    environment:
+      - FLASK_APP=main.py
+      - FLASK_ENV=development
+    tty: true
+
+  client:
+    image: rental_hub-client:development
+    build: ./app/client
+    ports:
+      - 3000:3000
+    stdin_open: true
+    volumes:
+      - './app/client/app:/home/app'
+      - '/home/app/node_modules'
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - REACT_APP_API_URL=http://127.0.0.1:5000
+
